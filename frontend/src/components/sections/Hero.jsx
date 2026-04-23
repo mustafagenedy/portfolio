@@ -25,6 +25,25 @@ export default function Hero() {
       </div>
 
       <div className="max-w-4xl mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="flex justify-center mb-8"
+        >
+          <div className="relative">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-accent to-primary blur-2xl opacity-40" />
+            <img
+              src="/profile.jpg"
+              alt="Mostafa Genidy"
+              className="relative w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-white dark:border-surface-dark shadow-lg"
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }}
+            />
+          </div>
+        </motion.div>
+
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}

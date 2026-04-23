@@ -1,6 +1,12 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import { sendMessage, getMessages, deleteMessage, markRead } from '../controllers/message.controller.js';
+import {
+  sendMessage,
+  getMessages,
+  getMyMessages,
+  deleteMessage,
+  markRead,
+} from '../controllers/message.controller.js';
 import { authenticate, authorize } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { sendMessageSchema } from '../validators/message.validator.js';
@@ -13,8 +19,9 @@ const messageLimiter = rateLimit({
   message: { error: 'Too many messages, try again later' },
 });
 
-// Public (or authenticated)
-router.post('/', messageLimiter, validate(sendMessageSchema), sendMessage);
+// Authenticated users
+router.post('/', authenticate, messageLimiter, validate(sendMessageSchema), sendMessage);
+router.get('/mine', authenticate, getMyMessages);
 
 // Admin
 router.get('/', authenticate, authorize('admin'), getMessages);

@@ -15,3 +15,8 @@ export const getAnalytics = asyncHandler(async (_req, res) => {
   const summary = await analyticsService.getAnalyticsSummary();
   res.json(summary);
 });
+
+export const getPublicStats = asyncHandler(async (_req, res) => {
+  const stats = await analyticsService.getPublicStats();
+  res.json(stats);
+});

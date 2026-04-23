@@ -14,6 +14,11 @@ export const getMessages = asyncHandler(async (req, res) => {
   res.json(result);
 });
 
+export const getMyMessages = asyncHandler(async (req, res) => {
+  const messages = await messageService.listUserMessages(req.user._id);
+  res.json(messages);
+});
+
 export const markRead = asyncHandler(async (req, res) => {
   const msg = await messageService.markMessageRead(req.params.id);
   res.json(msg);

@@ -26,6 +26,7 @@ const AdminMessages = lazy(() => import('./pages/admin/Messages'));
 const UserLayout = lazy(() => import('./components/layout/UserLayout'));
 const UserDashboard = lazy(() => import('./pages/user/Dashboard'));
 const UserSaved = lazy(() => import('./pages/user/Saved'));
+const UserMessages = lazy(() => import('./pages/user/Messages'));
 const UserProfile = lazy(() => import('./pages/user/Profile'));
 
 const queryClient = new QueryClient({
@@ -66,6 +67,7 @@ export default function App() {
                 <Route element={<UserLayout />}>
                   <Route path="dashboard" element={<UserDashboard />} />
                   <Route path="dashboard/saved" element={<UserSaved />} />
+                  <Route path="dashboard/messages" element={<UserMessages />} />
                   <Route path="dashboard/profile" element={<UserProfile />} />
                 </Route>
               </Route>

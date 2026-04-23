@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
 
+/* Tailwind v4 — enable class-based dark mode via <html class="dark"> */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #0C2B4E;
   --color-secondary: #1A3D64;
@@ -24,6 +27,23 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Subtle colorful gradient using the brand palette — stays professional */
+  background:
+    radial-gradient(ellipse at top left, rgba(29, 84, 108, 0.06), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(12, 43, 78, 0.05), transparent 50%),
+    #F4F4F4;
+  background-attachment: fixed;
+  color: var(--color-text);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.dark body {
+  background:
+    radial-gradient(ellipse at top left, rgba(29, 84, 108, 0.15), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(26, 61, 100, 0.2), transparent 50%),
+    #0F172A;
+  background-attachment: fixed;
+  color: var(--color-text-dark);
 }
 
 /* Dark mode via class on <html> */

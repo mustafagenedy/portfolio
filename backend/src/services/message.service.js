@@ -13,6 +13,9 @@ export const listMessages = async ({ page = 1, limit = 20 } = {}) => {
   return { messages, total, page, pages: Math.ceil(total / limit) };
 };
 
+export const listUserMessages = async (userId) =>
+  Message.find({ sender: userId }).sort({ createdAt: -1 });
+
 export const markMessageRead = async (id) => {
   const msg = await Message.findByIdAndUpdate(id, { isRead: true }, { new: true });
   if (!msg) throw ApiError.notFound('Message not found');

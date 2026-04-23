@@ -40,7 +40,17 @@ export default function AdminProjects() {
         techStack: payload.techStack
           ? payload.techStack.split(',').map((t) => t.trim()).filter(Boolean)
           : [],
+        order: Number(payload.order) || 0,
       };
+      // Strip internal React state before sending
+      delete body._id;
+      delete body.__v;
+      delete body.createdAt;
+      delete body.updatedAt;
+      delete body.clicks;
+      delete body.images;
+      delete body.thumbnail;
+
       return payload._id
         ? api.put(`/projects/${payload._id}`, body).then((r) => r.data)
         : api.post('/projects', body).then((r) => r.data);
@@ -169,6 +179,7 @@ export default function AdminProjects() {
             onCancel={() => setEditing(null)}
             loading={saveMutation.isPending}
             error={saveMutation.error?.response?.data?.error}
+            fieldErrors={saveMutation.error?.response?.data?.details || {}}
           />
         )}
       </Modal>
@@ -176,7 +187,7 @@ export default function AdminProjects() {
   );
 }
 
-function ProjectForm({ value, onSubmit, onCancel, loading, error }) {
+function ProjectForm({ value, onSubmit, onCancel, loading, error, fieldErrors = {} }) {
   const [form, setForm] = useState(value);
   const update = (k) => (e) =>
     setForm((f) => ({
@@ -189,26 +200,30 @@ function ProjectForm({ value, onSubmit, onCancel, loading, error }) {
     onSubmit(form);
   };
 
+  const err = (key) => fieldErrors[key]?.[0];
+
   return (
     <form onSubmit={submit} className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-4">
-        <Input label="Title" value={form.title} onChange={update('title')} required />
+        <Input label="Title" value={form.title} onChange={update('title')} required error={err('title')} />
         <Input
           label="Slug"
           value={form.slug}
           onChange={update('slug')}
           pattern="[a-z0-9\-]+"
           required
+          error={err('slug')}
         />
       </div>
 
-      <Input label="Summary" value={form.summary} onChange={update('summary')} required />
+      <Input label="Summary" value={form.summary} onChange={update('summary')} required error={err('summary')} />
 
       <Textarea
         label="Description"
         value={form.description}
         onChange={update('description')}
         required
+        error={err('description')}
       />
 
       <div className="grid sm:grid-cols-2 gap-4">
@@ -250,12 +265,13 @@ function ProjectForm({ value, onSubmit, onCancel, loading, error }) {
           label="Tech stack (comma-separated)"
           value={form.techStack}
           onChange={update('techStack')}
+          error={err('techStack')}
         />
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
-        <Input label="Live URL" value={form.liveUrl} onChange={update('liveUrl')} />
-        <Input label="GitHub URL" value={form.githubUrl} onChange={update('githubUrl')} />
+        <Input label="Live URL" value={form.liveUrl} onChange={update('liveUrl')} error={err('liveUrl')} />
+        <Input label="GitHub URL" value={form.githubUrl} onChange={update('githubUrl')} error={err('githubUrl')} />
       </div>
 
       <div className="flex flex-wrap gap-5">
@@ -269,7 +285,20 @@ function ProjectForm({ value, onSubmit, onCancel, loading, error }) {
         </label>
       </div>
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && (
+        <div className="p-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30">
+          <p className="text-sm font-semibold text-red-700 dark:text-red-400">{error}</p>
+          {Object.keys(fieldErrors).length > 0 && (
+            <ul className="mt-2 text-xs text-red-600 dark:text-red-400 list-disc list-inside space-y-0.5">
+              {Object.entries(fieldErrors).map(([field, msgs]) => (
+                <li key={field}>
+                  <strong>{field}:</strong> {Array.isArray(msgs) ? msgs.join(', ') : msgs}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       <div className="flex justify-end gap-2 pt-2 border-t border-gray-100 dark:border-gray-700">
         <Button type="button" variant="ghost" onClick={onCancel}>
@@ -283,7 +312,7 @@ function ProjectForm({ value, onSubmit, onCancel, loading, error }) {
   );
 }
 
-function Textarea({ label, ...props }) {
+function Textarea({ label, error, ...props }) {
   return (
     <div>
       <label className="block text-xs uppercase tracking-wider text-muted font-semibold mb-1.5">
@@ -292,8 +321,11 @@ function Textarea({ label, ...props }) {
       <textarea
         rows={props.rows || 4}
         {...props}
-        className="w-full px-4 py-3 rounded-xl bg-bg dark:bg-bg-dark border border-gray-200 dark:border-gray-700 text-sm text-text dark:text-text-dark focus:outline-none focus:border-accent transition-colors resize-y"
+        className={`w-full px-4 py-3 rounded-xl bg-bg dark:bg-bg-dark border text-sm text-text dark:text-text-dark focus:outline-none focus:border-accent transition-colors resize-y ${
+          error ? 'border-red-400' : 'border-gray-200 dark:border-gray-700'
+        }`}
       />
+      {error && <p className="mt-1.5 text-xs text-red-500">{error}</p>}
     </div>
   );
 }

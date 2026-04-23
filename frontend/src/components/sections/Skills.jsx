@@ -1,8 +1,24 @@
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import { FiEye, FiFolder, FiUsers, FiTrendingUp } from 'react-icons/fi';
 import Section from '../ui/Section';
-import { stack, systemMetrics } from '../../config/portfolio';
+import { stack } from '../../config/portfolio';
+import api from '../../lib/api';
+
+/** Public endpoint — returns { totalVisits, userCount, projectCount, topProjects }. */
+const fetchPublicStats = async () => {
+  const { data } = await api.get('/analytics/public');
+  return data;
+};
 
 export default function Skills() {
+  const { data: stats } = useQuery({
+    queryKey: ['public-stats'],
+    queryFn: fetchPublicStats,
+    retry: false,
+    staleTime: 60 * 1000,
+  });
+
   return (
     <Section id="skills" eyebrow="Skills" title="The tools I reach for.">
       <div className="grid lg:grid-cols-3 gap-8">
@@ -34,7 +50,7 @@ export default function Skills() {
           ))}
         </div>
 
-        {/* System metrics — reinforces systems-engineer branding */}
+        {/* Real site stats — not fake metrics */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -43,31 +59,44 @@ export default function Skills() {
           className="p-6 rounded-2xl bg-primary dark:bg-surface-dark text-white border border-transparent dark:border-gray-700"
         >
           <div className="flex items-center gap-2 mb-5">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-green-400" />
             <p className="text-xs uppercase tracking-wider text-white/60 font-semibold">
-              Live system status
+              Site activity
             </p>
           </div>
 
-          <div className="space-y-4">
-            {systemMetrics.map((m) => (
-              <div
-                key={m.label}
-                className="flex items-baseline justify-between pb-3 border-b border-white/10 last:border-0"
-              >
-                <span className="text-sm text-white/70">{m.label}</span>
-                <span className="font-mono font-bold text-lg text-accent dark:text-accent">
-                  {m.value}
-                </span>
-              </div>
-            ))}
-          </div>
+          {stats ? (
+            <div className="space-y-4">
+              <Stat icon={FiEye} label="Total visits" value={stats.totalVisits} />
+              <Stat icon={FiTrendingUp} label="Last 7 days" value={stats.weeklyVisits} />
+              <Stat icon={FiFolder} label="Projects" value={stats.projectCount} />
+              <Stat icon={FiUsers} label="Registered users" value={stats.userCount} />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="h-5 bg-white/5 rounded animate-pulse" />
+              <div className="h-5 bg-white/5 rounded animate-pulse" />
+              <div className="h-5 bg-white/5 rounded animate-pulse" />
+              <div className="h-5 bg-white/5 rounded animate-pulse" />
+            </div>
+          )}
 
           <p className="mt-5 text-[11px] text-white/50 leading-relaxed">
-            Representative targets from production systems I've shipped.
+            Live numbers from this site's database — updated on every visit.
           </p>
         </motion.div>
       </div>
     </Section>
+  );
+}
+
+function Stat({ icon: Icon, label, value }) {
+  return (
+    <div className="flex items-baseline justify-between pb-3 border-b border-white/10 last:border-0">
+      <span className="flex items-center gap-2 text-sm text-white/70">
+        <Icon size={14} /> {label}
+      </span>
+      <span className="font-mono font-bold text-lg text-accent dark:text-accent">{value}</span>
+    </div>
   );
 }

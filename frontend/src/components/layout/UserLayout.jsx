@@ -1,10 +1,11 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { FiGrid, FiBookmark, FiUser, FiArrowLeft, FiLogOut } from 'react-icons/fi';
+import { FiGrid, FiBookmark, FiMail, FiUser, FiArrowLeft, FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../../store/auth';
 
 const links = [
   { to: '/dashboard', icon: FiGrid, label: 'Dashboard' },
   { to: '/dashboard/saved', icon: FiBookmark, label: 'Saved Projects' },
+  { to: '/dashboard/messages', icon: FiMail, label: 'My Messages' },
   { to: '/dashboard/profile', icon: FiUser, label: 'Profile' },
 ];
 

@@ -11,6 +11,18 @@ export const recordVisit = async ({ page, projectId, ip, userAgent }) =>
     userAgent: userAgent || '',
   });
 
+/** Public-facing stats — safe to expose. No admin data leaks. */
+export const getPublicStats = async () => {
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const [totalVisits, weeklyVisits, projectCount, userCount] = await Promise.all([
+    Visit.countDocuments(),
+    Visit.countDocuments({ createdAt: { $gte: sevenDaysAgo } }),
+    Project.countDocuments({ visible: true }),
+    User.countDocuments(),
+  ]);
+  return { totalVisits, weeklyVisits, projectCount, userCount };
+};
+
 export const getAnalyticsSummary = async () => {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);

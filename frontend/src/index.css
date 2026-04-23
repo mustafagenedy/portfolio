@@ -1,0 +1,70 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
+
+@theme {
+  --color-primary: #0C2B4E;
+  --color-secondary: #1A3D64;
+  --color-accent: #1D546C;
+  --color-bg: #F4F4F4;
+  --color-bg-dark: #0F172A;
+  --color-surface: #FFFFFF;
+  --color-surface-dark: #1E293B;
+  --color-text: #1E293B;
+  --color-text-dark: #E2E8F0;
+  --color-muted: #64748B;
+  --font-sans: 'Inter', 'Poppins', ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode via class on <html> */
+.dark {
+  color-scheme: dark;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+/* Glass effect utility */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Pure-CSS animated hero blobs — GPU-friendly, no React re-renders */
+@keyframes blob-drift-1 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(40px, 20px); }
+}
+@keyframes blob-drift-2 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-40px, -20px); }
+}
+.blob-1 { animation: blob-drift-1 14s ease-in-out infinite; will-change: transform; }
+.blob-2 { animation: blob-drift-2 16s ease-in-out infinite; will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .blob-1, .blob-2 { animation: none; }
+}

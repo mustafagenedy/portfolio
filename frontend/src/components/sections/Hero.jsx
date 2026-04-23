@@ -2,8 +2,12 @@ import { motion } from 'framer-motion';
 import { FiArrowRight, FiDownload, FiMail } from 'react-icons/fi';
 import { profile } from '../../config/portfolio';
 import Button from '../ui/Button';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function Hero() {
+  const { dark } = useTheme();
+  // Invert: light mode → dark icon (contrast); dark mode → light icon (contrast)
+  const avatarSrc = dark ? '/light-180.png' : '/dark-180.png';
   return (
     <section
       id="hero"
@@ -34,9 +38,9 @@ export default function Hero() {
           <div className="relative">
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-accent to-primary blur-2xl opacity-40" />
             <img
-              src="/profile.jpg"
+              src={avatarSrc}
               alt="Mostafa Genidy"
-              className="relative w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-white dark:border-surface-dark shadow-lg"
+              className="relative w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-white dark:border-surface-dark shadow-lg transition-opacity duration-300"
               onError={(e) => {
                 e.target.style.display = 'none';
               }}

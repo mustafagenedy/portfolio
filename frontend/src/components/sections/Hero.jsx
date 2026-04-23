@@ -7,7 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 export default function Hero() {
   const { dark } = useTheme();
   // Invert: light mode → dark icon (contrast); dark mode → light icon (contrast)
-  const avatarSrc = dark ? '/light-180.png' : '/dark-180.png';
+  const avatarSrc = dark ? '/light.png' : '/dark-180.png';
   return (
     <section
       id="hero"

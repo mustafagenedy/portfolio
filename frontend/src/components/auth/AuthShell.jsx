@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import { FiX } from 'react-icons/fi';
+import { useTheme } from '../../context/ThemeContext';
 
 /** Shared auth-page wrapper — brand strip + card + exit button. */
 export default function AuthShell({ title, subtitle, children, footer }) {
+  const { dark } = useTheme();
+  const logoSrc = dark ? '/light.png' : '/dark-180.png';
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-bg dark:bg-bg-dark p-6 relative">
       {/* Exit to home — top-right floating button */}
@@ -15,11 +19,12 @@ export default function AuthShell({ title, subtitle, children, footer }) {
       </Link>
 
       <div className="w-full max-w-md">
-        <Link
-          to="/"
-          className="inline-block text-2xl font-bold text-primary dark:text-white mb-8"
-        >
-          MG<span className="text-accent">.</span>
+        <Link to="/" aria-label="Home" className="inline-block mb-8">
+          <img
+            src={logoSrc}
+            alt="Mostafa Genidy"
+            className="h-12 w-12 rounded-full object-cover transition-opacity duration-300"
+          />
         </Link>
 
         <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 md:p-8">

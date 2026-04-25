@@ -5,7 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 /** Shared auth-page wrapper — brand strip + card + exit button. */
 export default function AuthShell({ title, subtitle, children, footer }) {
   const { dark } = useTheme();
-  const logoSrc = dark ? '/light.png' : '/dark-180.png';
+  const logoSrc = dark ? '/light.png' : '/dark.png';
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-bg dark:bg-bg-dark p-6 relative">

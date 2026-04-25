@@ -15,7 +15,7 @@ export default function Navbar() {
   const { dark, toggle } = useTheme();
   const user = useAuth((s) => s.user);
   const isAdmin = user?.role === 'admin';
-  const logoSrc = dark ? '/light.png' : '/dark-180.png';
+  const logoSrc = dark ? '/light.png' : '/dark.png';
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-bg-dark/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50">

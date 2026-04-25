@@ -11,6 +11,9 @@ const validate = ({ name, email, password }) => {
   if (!name || name.length < 2) return 'Name must be at least 2 characters';
   if (!/^\S+@\S+\.\S+$/.test(email)) return 'Enter a valid email address';
   if (password.length < 8) return 'Password must be at least 8 characters';
+  if (!/[a-z]/.test(password)) return 'Password must contain a lowercase letter';
+  if (!/[A-Z]/.test(password)) return 'Password must contain an uppercase letter';
+  if (!/[0-9]/.test(password)) return 'Password must contain a digit';
   return null;
 };
 
@@ -71,14 +74,19 @@ export default function Register() {
           autoComplete="email"
           required
         />
-        <Input
-          label="Password"
-          type="password"
-          value={form.password}
-          onChange={update('password')}
-          autoComplete="new-password"
-          required
-        />
+        <div>
+          <Input
+            label="Password"
+            type="password"
+            value={form.password}
+            onChange={update('password')}
+            autoComplete="new-password"
+            required
+          />
+          <p className="text-xs text-muted mt-1.5">
+            8+ characters, with at least one uppercase, one lowercase, and one digit.
+          </p>
+        </div>
 
         {error && (
           <p className="text-sm text-red-500 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-xl px-3 py-2">

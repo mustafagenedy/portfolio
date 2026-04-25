@@ -25,11 +25,11 @@ export const getUsers = asyncHandler(async (req, res) => {
 });
 
 export const updateUser = asyncHandler(async (req, res) => {
-  const user = await userService.adminUpdateUser(req.params.id, req.validated);
+  const user = await userService.adminUpdateUser(req.params.id, req.validated, req.user._id);
   res.json(user);
 });
 
 export const deleteUser = asyncHandler(async (req, res) => {
-  await userService.deleteUser(req.params.id);
+  await userService.deleteUser(req.params.id, req.user._id);
   res.json({ message: 'User deleted' });
 });

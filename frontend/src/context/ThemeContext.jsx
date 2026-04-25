@@ -5,7 +5,7 @@ const ThemeContext = createContext();
 /** Keep the browser tab favicon in sync with the current theme. */
 const updateFavicon = (dark) => {
   // Invert: light mode → dark icon (contrast); dark mode → light icon (contrast)
-  const href = dark ? '/light.png' : '/dark-180.png';
+  const href = dark ? '/light.png' : '/dark.png';
 
   // Replace all existing icon links so there's no stale fallback
   document.querySelectorAll("link[rel~='icon']").forEach((el) => el.remove());

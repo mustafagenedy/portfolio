@@ -7,7 +7,7 @@ export const register = asyncHandler(async (req, res) => {
 });
 
 export const login = asyncHandler(async (req, res) => {
-  const result = await authService.loginUser(req.validated);
+  const result = await authService.loginUser(req.validated, req.ip);
   res.json(result);
 });
 
